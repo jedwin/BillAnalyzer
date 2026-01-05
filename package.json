@@ -1,0 +1,53 @@
+{
+  "name": "billanalyzer",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "可以通过导入微信、支付宝等账单文件，进行统计呈现，方便了解自己的花费。支持 CSV/Excel 格式，自动处理编码和字段合并。",
+  "main": "main.jsx",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
+    "test": "echo \"Error: no test specified. Use 'npm run lint' for static code analysis.\" && exit 0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jedwin/BillAnalyzer.git"
+  },
+  "keywords": [
+    "bill",
+    "analyzer",
+    "wechat",
+    "alipay",
+    "financial",
+    "expense-tracker",
+    "data-visualization"
+  ],
+  "author": "Nathan Tse",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/jedwin/BillAnalyzer/issues"
+  },
+  "homepage": "https://github.com/jedwin/BillAnalyzer#readme",
+  "dependencies": {
+    "lucide-react": "^0.294.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "recharts": "^2.10.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.43",
+    "@types/react-dom": "^18.2.17",
+    "@vitejs/plugin-react": "^4.2.1",
+    "autoprefixer": "^10.4.23",
+    "eslint": "^8.55.0",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.5",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^3.4.17",
+    "vite": "^5.0.8"
+  }
+}
