@@ -1,78 +1,118 @@
 <!doctype html>
 <html lang="zh-CN">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="全能账单透视 - 微信、支付宝账单数据分析工具" />
-    <title>全能账单透视 | BillAnalyzer</title>
-    <style>
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="全能账单透视 - 微信、支付宝账单数据分析工具" />
+  <title>全能账单透视 | BillAnalyzer</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+        'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+        sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #CBD5E1;
+      border-radius: 3px;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #94A3B8;
+    }
+
+    @keyframes fade-in {
+      from {
+        opacity: 0;
       }
-      body {
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-          'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-          sans-serif;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
+
+      to {
+        opacity: 1;
       }
-      .custom-scrollbar::-webkit-scrollbar {
-        width: 6px;
+    }
+
+    @keyframes zoom-in-95 {
+      from {
+        transform: scale(0.95);
       }
-      .custom-scrollbar::-webkit-scrollbar-track {
-        background: transparent;
+
+      to {
+        transform: scale(1);
       }
-      .custom-scrollbar::-webkit-scrollbar-thumb {
-        background: #CBD5E1;
-        border-radius: 3px;
+    }
+
+    @keyframes slide-in-from-top-4 {
+      from {
+        transform: translateY(-1rem);
       }
-      .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-        background: #94A3B8;
+
+      to {
+        transform: translateY(0);
       }
-      @keyframes fade-in {
-        from { opacity: 0; }
-        to { opacity: 1; }
+    }
+
+    @keyframes slide-in-from-bottom-8 {
+      from {
+        transform: translateY(2rem);
+        opacity: 0;
       }
-      @keyframes zoom-in-95 {
-        from { transform: scale(0.95); }
-        to { transform: scale(1); }
+
+      to {
+        transform: translateY(0);
+        opacity: 1;
       }
-      @keyframes slide-in-from-top-4 {
-        from { transform: translateY(-1rem); }
-        to { transform: translateY(0); }
-      }
-      @keyframes slide-in-from-bottom-8 {
-        from { transform: translateY(2rem); opacity: 0; }
-        to { transform: translateY(0); opacity: 1; }
-      }
-      .animate-in {
-        animation-fill-mode: both;
-      }
-      .fade-in {
-        animation-name: fade-in;
-      }
-      .zoom-in-95 {
-        animation-name: zoom-in-95;
-      }
-      .slide-in-from-top-4 {
-        animation-name: slide-in-from-top-4;
-      }
-      .slide-in-from-bottom-8 {
-        animation-name: slide-in-from-bottom-8;
-      }
-      .duration-200 {
-        animation-duration: 200ms;
-      }
-      .duration-700 {
-        animation-duration: 700ms;
-      }
-    </style>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+    }
+
+    .animate-in {
+      animation-fill-mode: both;
+    }
+
+    .fade-in {
+      animation-name: fade-in;
+    }
+
+    .zoom-in-95 {
+      animation-name: zoom-in-95;
+    }
+
+    .slide-in-from-top-4 {
+      animation-name: slide-in-from-top-4;
+    }
+
+    .slide-in-from-bottom-8 {
+      animation-name: slide-in-from-bottom-8;
+    }
+
+    .duration-200 {
+      animation-duration: 200ms;
+    }
+
+    .duration-700 {
+      animation-duration: 700ms;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="root"></div>
+  <script type="module" src="/src/main.jsx"></script>
+</body>
+
 </html>
