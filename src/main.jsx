@@ -538,6 +538,10 @@ export default function App() {
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
 
+    // 分页状态
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage, setItemsPerPage] = useState(50);
+
     // 动态加载 XLSX
     useEffect(() => {
         if (!window.XLSX) {
@@ -690,6 +694,22 @@ export default function App() {
             return matchesSearch && matchesType && matchesDate;
         });
     }, [transactions, searchTerm, filterType, startDate, endDate]);
+
+    // 分页数据计算
+    const paginatedData = useMemo(() => {
+        const start = (currentPage - 1) * itemsPerPage;
+        const end = start + itemsPerPage;
+        return filteredData.slice(start, end);
+    }, [filteredData, currentPage, itemsPerPage]);
+
+    const totalPages = useMemo(() => {
+        return Math.ceil(filteredData.length / itemsPerPage);
+    }, [filteredData.length, itemsPerPage]);
+
+    // 当筛选条件变化时，重置到第一页
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [searchTerm, filterType, startDate, endDate]);
 
     const stats = useMemo(() => {
         let income = 0, expense = 0, neutral = 0;
@@ -1107,7 +1127,7 @@ export default function App() {
                                         </tr>
                                     </thead>
                                     <tbody className="text-sm">
-                                        {filteredData.slice(0, 100).map((t, idx) => (
+                                        {paginatedData.map((t, idx) => (
                                             <tr
                                                 key={`${t['交易单号']}-${idx}`}
                                                 onClick={() => setSelectedTransaction(t)}
@@ -1142,15 +1162,132 @@ export default function App() {
                                                 <td className="py-3 text-center text-slate-400 text-xs">{t['当前状态']}</td>
                                             </tr>
                                         ))}
-                                        {filteredData.length > 100 && (
-                                            <tr><td colSpan="8" className="text-center py-4 text-slate-400 text-xs">仅显示前 100 条记录</td></tr>
-                                        )}
                                         {filteredData.length === 0 && (
                                             <tr><td colSpan="8" className="text-center py-8 text-slate-400">没有找到相关记录</td></tr>
                                         )}
                                     </tbody>
                                 </table>
                             </div>
+
+                            {/* 分页控制器 */}
+                            {filteredData.length > 0 && (
+                                <div className="mt-4 flex flex-col sm:flex-row items-center justify-between gap-4 px-4 pb-4">
+                                    <div className="flex items-center gap-3">
+                                        <span className="text-sm text-slate-600">每页显示</span>
+                                        <select
+                                            value={itemsPerPage}
+                                            onChange={(e) => {
+                                                setItemsPerPage(Number(e.target.value));
+                                                setCurrentPage(1);
+                                            }}
+                                            className="px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-sm text-slate-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none cursor-pointer"
+                                        >
+                                            <option value={20}>20</option>
+                                            <option value={50}>50</option>
+                                            <option value={100}>100</option>
+                                            <option value={200}>200</option>
+                                        </select>
+                                        <span className="text-sm text-slate-600">
+                                            共 {filteredData.length} 条记录
+                                        </span>
+                                    </div>
+
+                                    <div className="flex items-center gap-2">
+                                        <button
+                                            onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                                            disabled={currentPage === 1}
+                                            className="px-3 py-1.5 rounded-lg text-sm font-medium transition-all disabled:opacity-40 disabled:cursor-not-allowed bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-slate-300"
+                                        >
+                                            上一页
+                                        </button>
+                                        
+                                        <div className="flex items-center gap-1">
+                                            {(() => {
+                                                const pages = [];
+                                                
+                                                if (totalPages <= 7) {
+                                                    // 如果总页数小于等于7，显示所有页码
+                                                    for (let i = 1; i <= totalPages; i++) {
+                                                        pages.push(i);
+                                                    }
+                                                } else {
+                                                    // 总是显示前3页
+                                                    pages.push(1, 2, 3);
+                                                    
+                                                    // 总是显示后3页
+                                                    const lastThree = [totalPages - 2, totalPages - 1, totalPages];
+                                                    
+                                                    // 检查前3页和后3页是否有重叠或相邻
+                                                    if (3 < totalPages - 3) {
+                                                        // 有间隔，添加省略号
+                                                        pages.push('...');
+                                                        pages.push(...lastThree);
+                                                    } else {
+                                                        // 无间隔或紧邻，填充中间的页码
+                                                        for (let i = 4; i <= totalPages; i++) {
+                                                            pages.push(i);
+                                                        }
+                                                    }
+                                                }
+                                                
+                                                return pages.map((page, idx) => {
+                                                    if (page === '...') {
+                                                        return (
+                                                            <span key={`ellipsis-${idx}`} className="px-2 text-slate-400">
+                                                                ...
+                                                            </span>
+                                                        );
+                                                    }
+                                                    
+                                                    return (
+                                                        <button
+                                                            key={page}
+                                                            onClick={() => setCurrentPage(page)}
+                                                            className={`w-8 h-8 rounded-lg text-sm font-medium transition-all ${
+                                                                currentPage === page
+                                                                    ? 'bg-blue-500 text-white shadow-md'
+                                                                    : 'bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-slate-300'
+                                                            }`}
+                                                        >
+                                                            {page}
+                                                        </button>
+                                                    );
+                                                });
+                                            })()}
+                                        </div>
+
+                                        {/* 页码跳转输入框 */}
+                                        <div className="flex items-center gap-1 ml-2">
+                                            <span className="text-sm text-slate-600">跳至</span>
+                                            <input
+                                                type="number"
+                                                min="1"
+                                                max={totalPages}
+                                                placeholder={currentPage}
+                                                onKeyDown={(e) => {
+                                                    if (e.key === 'Enter') {
+                                                        const value = parseInt(e.target.value);
+                                                        if (value >= 1 && value <= totalPages) {
+                                                            setCurrentPage(value);
+                                                            e.target.value = '';
+                                                        }
+                                                    }
+                                                }}
+                                                className="w-16 px-2 py-1.5 text-center bg-white border border-slate-200 rounded-lg text-sm text-slate-700 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                                            />
+                                            <span className="text-sm text-slate-600">页</span>
+                                        </div>
+
+                                        <button
+                                            onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                                            disabled={currentPage === totalPages}
+                                            className="px-3 py-1.5 rounded-lg text-sm font-medium transition-all disabled:opacity-40 disabled:cursor-not-allowed bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-slate-300"
+                                        >
+                                            下一页
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
                         </Card>
                     </div>
                 )}
