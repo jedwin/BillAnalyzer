@@ -761,11 +761,11 @@ export default function App() {
         let result = Object.keys(map).map(key => ({ name: key, value: map[key] }));
         result.sort((a, b) => b.value - a.value);
 
-        if (result.length > 8) {
-            const top8 = result.slice(0, 8);
-            const others = result.slice(8).reduce((sum, item) => sum + item.value, 0);
-            top8.push({ name: '其他', value: others });
-            return top8;
+        if (result.length > 50) {
+            const top50 = result.slice(0, 50);
+            const others = result.slice(50).reduce((sum, item) => sum + item.value, 0);
+            top50.push({ name: '其他', value: others });
+            return top50;
         }
         return result;
     }, [filteredData, categoryView, chartAnalysisType]);
@@ -956,7 +956,7 @@ export default function App() {
                                         </div>
 
                                         {/* Top List */}
-                                        <div className="mt-4 flex-1 overflow-y-auto pr-1 custom-scrollbar">
+                                        <div className="mt-4 flex-1 max-h-[250px] overflow-y-auto pr-1 custom-scrollbar">
                                             <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Top {chartAnalysisType}来源/去向</h4>
                                             <div className="space-y-2">
                                                 {categoryData.map((item, index) => (
