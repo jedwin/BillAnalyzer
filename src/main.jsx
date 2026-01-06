@@ -537,6 +537,9 @@ export default function App() {
     // 日期筛选状态
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
+    
+    // 金额筛选状态
+    const [minAmount, setMinAmount] = useState(0);
 
     // 分页状态
     const [currentPage, setCurrentPage] = useState(1);
@@ -690,10 +693,13 @@ export default function App() {
 
             if (startDate && tDate < startDate) matchesDate = false;
             if (endDate && tDate > endDate) matchesDate = false;
+            
+            // 金额过滤
+            const matchesAmount = t['金额(元)'] >= minAmount;
 
-            return matchesSearch && matchesType && matchesDate;
+            return matchesSearch && matchesType && matchesDate && matchesAmount;
         });
-    }, [transactions, searchTerm, filterType, startDate, endDate]);
+    }, [transactions, searchTerm, filterType, startDate, endDate, minAmount]);
 
     // 分页数据计算
     const paginatedData = useMemo(() => {
@@ -709,7 +715,7 @@ export default function App() {
     // 当筛选条件变化时，重置到第一页
     useEffect(() => {
         setCurrentPage(1);
-    }, [searchTerm, filterType, startDate, endDate]);
+    }, [searchTerm, filterType, startDate, endDate, minAmount]);
 
     const stats = useMemo(() => {
         let income = 0, expense = 0, neutral = 0;
@@ -1110,6 +1116,20 @@ export default function App() {
                                                 <X size={16} />
                                             </button>
                                         )}
+                                    </div>
+                                    
+                                    <div className="relative">
+                                        仅统计大于等于
+                                        <input
+                                            type="number"
+                                            placeholder="最小金额"
+                                            value={minAmount}
+                                            onChange={(e) => setMinAmount(Number(e.target.value) || 0)}
+                                            min="0"
+                                            step="0.01"
+                                            className="w-full sm:w-32 px-3 py-2 rounded-lg bg-slate-100/50 border-transparent focus:bg-white focus:ring-2 focus:ring-blue-400 focus:outline-none transition-all placeholder-slate-400 text-slate-700 text-sm"
+                                        />
+                                        元的交易记录
                                     </div>
 
                                     <div className="relative overflow-hidden">
