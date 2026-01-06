@@ -1098,9 +1098,18 @@ export default function App() {
                                             type="text"
                                             placeholder="搜索..."
                                             value={searchTerm}
-                                            onChange={(e) => setSearchTerm(e.target.value)}
-                                            className="w-full pl-10 pr-4 py-2 rounded-lg bg-slate-100/50 border-transparent focus:bg-white focus:ring-2 focus:ring-blue-400 focus:outline-none transition-all placeholder-slate-400 text-slate-700 text-sm"
+                                            onChange={(e) => setSearchTerm(e.target.value.trim())}
+                                            className="w-full pl-10 pr-10 py-2 rounded-lg bg-slate-100/50 border-transparent focus:bg-white focus:ring-2 focus:ring-blue-400 focus:outline-none transition-all placeholder-slate-400 text-slate-700 text-sm"
                                         />
+                                        {searchTerm && (
+                                            <button
+                                                onClick={() => setSearchTerm('')}
+                                                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-red-500 transition-colors p-1 hover:bg-slate-100 rounded-full"
+                                                title="清除搜索"
+                                            >
+                                                <X size={16} />
+                                            </button>
+                                        )}
                                     </div>
 
                                     <div className="relative overflow-hidden">
